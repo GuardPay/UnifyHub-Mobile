@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - UnifyHub</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            text-align: center;
+            padding: 30px;
+            border: 1px solid #fff;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        input[type="password"] {
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            width: 80%;
+            background-color: #222;
+            color: #fff;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #444;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #666;
+        }
+        .message {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <img src="https://raw.githubusercontent.com/GuardPay/UnifyHub-Mobile/refs/heads/main/IMG_2024_10_29_220841.png" alt="UnifyHub Logo" class="logo">
+        <h2>Olá Luan, seja bem-vindo!</h2>
+        <p>Por favor, digite sua senha secreta</p>
+        <input type="password" id="password" placeholder="Senha">
+        <button onclick="checkPassword()">Entrar</button>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        function checkLastLogin() {
+            const lastLogin = localStorage.getItem('lastLogin');
+            if (lastLogin) {
+                const lastLoginTime = new Date(parseInt(lastLogin));
+                const currentTime = new Date();
+                const timeDifference = (currentTime - lastLoginTime) / (1000 * 60 * 60); // Convert milliseconds to hours
+                
+                if (timeDifference < 1) {
+                    // If less than 1 hour, redirect immediately
+                    window.location.href = "outro_codigo.html"; // Substitua pelo caminho do seu segundo arquivo HTML
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function checkPassword() {
+            const correctPassword = "24250@Ln";
+            const enteredPassword = document.getElementById("password").value;
+            const messageDiv = document.getElementById("message");
+
+            if (enteredPassword === correctPassword) {
+                const currentTime = new Date().getTime();
+                localStorage.setItem('lastLogin', currentTime.toString());
+                // Redirect to the next page
+                window.location.href = "outro_codigo.html"; // Substitua pelo caminho do seu segundo arquivo HTML
+            } else {
+                messageDiv.innerHTML = "<span style='color: red;'>Acesso negado</span>";
+            }
+        }
+
+        // Check last login on page load
+        window.onload = checkLastLogin;
+    </script>
+</body>
+</html>
