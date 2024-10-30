@@ -21,6 +21,7 @@
         .welcome {
             text-align: center;
             margin-bottom: 40px;
+            animation: fadeIn 1.5s ease;
         }
 
         .logo {
@@ -28,66 +29,81 @@
             align-items: center;
             gap: 10px;
             margin-bottom: 10px;
-            animation: fadeIn 2s ease;
         }
 
         .logo img {
             width: 50px;
             height: 50px;
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #3a3a3a;
-            color: #ffffff;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #555555;
+            animation: fadeIn 2s ease;
         }
 
         .button-container {
             display: flex;
-            flex-direction: column;
-            gap: 16px;
+            flex-wrap: wrap;
+            gap: 20px;
             width: 100%;
-            max-width: 500px;
-            text-align: center;
+            max-width: 600px;
+            justify-content: center;
             animation: fadeIn 2s ease;
         }
 
-        .btn-101 {
-            background: linear-gradient(135deg, #1f1f1f, #3a3a3a);
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-            color: #ffffff;
-            cursor: pointer;
-            display: block;
-            font-size: 1.1rem;
-            font-weight: 600;
-            padding: 1rem;
-            text-decoration: none;
-            text-transform: uppercase;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-            width: 80%;
-            margin: 0 auto;
+        .btn-5,
+        .btn-5 *,
+        .btn-5 :after,
+        .btn-5 :before,
+        .btn-5:after,
+        .btn-5:before {
+            border: 0 solid;
             box-sizing: border-box;
         }
 
-        .btn-101:hover {
-            background: linear-gradient(135deg, #3a3a3a, #5a5a5a);
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+        .btn-5 {
+            color: #ffffff;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 100%;
+            font-weight: 900;
+            text-transform: uppercase;
+            border-radius: 99rem;
+            border-width: 2px;
+            overflow: hidden;
+            padding: 12px 24px;
+            position: relative;
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            letter-spacing: 1px;
         }
 
-        .btn-101:active {
-            transform: translateY(0);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        .btn-5 span {
+            mix-blend-mode: difference;
+        }
+
+        .btn-5:before {
+            --tilt: 1.2rem;
+            background: #fff;
+            clip-path: polygon(
+                0 0,
+                calc(100% - var(--tilt)) 0,
+                100% 50%,
+                calc(100% - var(--tilt)) 100%,
+                0 100%
+            );
+            content: "";
+            display: block;
+            height: 100%;
+            left: calc(-100% - var(--tilt));
+            position: absolute;
+            top: 0;
+            transform: translateX(var(--progress, 0));
+            transition: transform 0.2s ease;
+            width: calc(100% + var(--tilt));
+        }
+
+        .btn-5:hover:before {
+            --progress: 100%;
         }
 
         @keyframes fadeIn {
@@ -106,11 +122,11 @@
     </div>
 
     <div class="button-container">
-        <a href="https://www.xnxx.com/" class="btn-101">XNXX</a>
-        <a href="https://pt.pornhub.com/" class="btn-101">Pornhub</a>
-        <a href="https://www.xvideos.com/" class="btn-101">XVideos</a>
-        <a href="https://xvideosporno.blog.br/" class="btn-101">XVideos Blog</a>
-        <a href="https://theporndude.com/pt/top-porn-tube-sites" class="btn-101">The Porn Dude</a>
+        <a href="https://www.xnxx.com/" class="btn-5"><span>XNXX</span></a>
+        <a href="https://pt.pornhub.com/" class="btn-5"><span>Pornhub</span></a>
+        <a href="https://www.xvideos.com/" class="btn-5"><span>XVideos</span></a>
+        <a href="https://xvideosporno.blog.br/" class="btn-5"><span>XVideos Blog</span></a>
+        <a href="https://theporndude.com/pt/top-porn-tube-sites" class="btn-5"><span>The Porn Dude</span></a>
     </div>
 
 </body>
