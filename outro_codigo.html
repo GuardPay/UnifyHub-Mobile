@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UnifyHub - Interface de Acesso</title>
     <style>
         body {
@@ -15,29 +15,32 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         .welcome {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
         .logo {
-            margin-bottom: 10px;
+            margin-bottom: 1rem;
             animation: fadeIn 2s ease;
         }
 
         .logo img {
-            width: 100px; /* Aumentamos o tamanho do logotipo */
-            height: 100px;
+            width: 30vw; /* Aumentado para 30% da largura da tela */
+            height: auto;
+            max-width: 150px; /* Limitar tamanho máximo para telas maiores */
         }
 
         .welcome-text {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+            font-size: 1.5rem; /* Aumentado o tamanho da fonte */
+            margin-bottom: 0.5rem;
             opacity: 0;
             animation: typewriter 4s steps(30) forwards;
             white-space: nowrap;
@@ -47,7 +50,7 @@
         }
 
         .name-text {
-            font-size: 2rem;
+            font-size: 2.2rem; /* Aumentado o tamanho da fonte */
             font-weight: bold;
             opacity: 0;
             animation: appear 1s forwards 4s;
@@ -70,14 +73,13 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
             color: #ffffff;
             cursor: pointer;
-            display: block;
-            font-size: 1.1rem;
+            font-size: 1.2rem; /* Aumentado o tamanho da fonte */
             font-weight: 600;
-            padding: 1rem;
+            padding: 1.2rem; /* Aumentado o padding para botões maiores */
             text-decoration: none;
             text-transform: uppercase;
             transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-            width: calc(50% - 20px);
+            width: calc(50% - 16px);
             box-sizing: border-box;
             position: relative;
             overflow: hidden;
@@ -132,6 +134,23 @@
         @keyframes gradientLine {
             0% { background-position: 0% 50%; }
             100% { background-position: 100% 50%; }
+        }
+
+        /* Media Query para telas menores */
+        @media (max-width: 600px) {
+            .welcome-text {
+                font-size: 1.3rem;
+            }
+
+            .name-text {
+                font-size: 2rem;
+            }
+
+            .btn-101 {
+                font-size: 1.1rem;
+                padding: 1rem;
+                width: calc(50% - 16px);
+            }
         }
     </style>
 </head>
