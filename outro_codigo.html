@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
     <title>UnifyHub - Interface de Acesso</title>
     <style>
         body {
-            background-color: #000000;
+            background-color: #39016a;
             color: #ffffff;
             font-family: 'Poppins', sans-serif;
             display: flex;
@@ -21,94 +20,118 @@
         .welcome {
             text-align: center;
             margin-bottom: 40px;
-            animation: fadeIn 1.5s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
             margin-bottom: 10px;
+            animation: fadeIn 2s ease;
         }
 
         .logo img {
-            width: 50px;
-            height: 50px;
-            animation: fadeIn 2s ease;
+            width: 100px; /* Aumentamos o tamanho do logotipo */
+            height: 100px;
+        }
+
+        .welcome-text {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: typewriter 4s steps(30) forwards;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid rgba(255, 255, 255, 0.75);
+            width: 0;
+        }
+
+        .name-text {
+            font-size: 2rem;
+            font-weight: bold;
+            opacity: 0;
+            animation: appear 1s forwards 4s;
         }
 
         .button-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 16px;
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             justify-content: center;
             animation: fadeIn 2s ease;
         }
 
-        .btn-5,
-        .btn-5 *,
-        .btn-5 :after,
-        .btn-5 :before,
-        .btn-5:after,
-        .btn-5:before {
-            border: 0 solid;
-            box-sizing: border-box;
-        }
-
-        .btn-5 {
+        .btn-101 {
+            background: linear-gradient(135deg, #52028c, #6a03a6);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
             color: #ffffff;
             cursor: pointer;
-            font-family: inherit;
-            font-size: 100%;
-            font-weight: 900;
-            text-transform: uppercase;
-            border-radius: 99rem;
-            border-width: 2px;
-            overflow: hidden;
-            padding: 12px 24px;
-            position: relative;
             display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 1rem;
             text-decoration: none;
+            text-transform: uppercase;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            width: calc(50% - 20px);
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
             text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            letter-spacing: 1px;
         }
 
-        .btn-5 span {
-            mix-blend-mode: difference;
-        }
-
-        .btn-5:before {
-            --tilt: 1.2rem;
-            background: #fff;
-            clip-path: polygon(
-                0 0,
-                calc(100% - var(--tilt)) 0,
-                100% 50%,
-                calc(100% - var(--tilt)) 100%,
-                0 100%
-            );
-            content: "";
-            display: block;
-            height: 100%;
-            left: calc(-100% - var(--tilt));
+        .btn-101::after {
+            content: '';
             position: absolute;
             top: 0;
-            transform: translateX(var(--progress, 0));
-            transition: transform 0.2s ease;
-            width: calc(100% + var(--tilt));
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            transition: opacity 0.3s;
+            opacity: 0;
         }
 
-        .btn-5:hover:before {
-            --progress: 100%;
+        .btn-101:hover::after {
+            opacity: 1;
+            animation: gradientLine 1s linear infinite;
+        }
+
+        .btn-101:hover {
+            background: linear-gradient(135deg, #6a03a6, #7c04b8);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-101:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+
+        @keyframes typewriter {
+            to {
+                width: 100%;
+                opacity: 1;
+            }
+        }
+
+        @keyframes appear {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes gradientLine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
     </style>
 </head>
@@ -116,17 +139,18 @@
 
     <div class="welcome">
         <div class="logo">
-            <img src="https://raw.githubusercontent.com/GuardPay/UnifyHub-Mobile/refs/heads/main/IMG_2024_10_29_220841.png" alt="UnifyHub Logo">
-            <h1>Bem-vindo ao UnifyHub</h1>
+            <img src="https://raw.githubusercontent.com/GuardPay/UnifyHub-Mobile/refs/heads/main/LogoMakerCa-1730379978953.png" alt="UnifyHub Logo">
         </div>
+        <div class="welcome-text">Bem-vindo ao</div>
+        <div class="name-text">UnifyHub</div>
     </div>
 
     <div class="button-container">
-        <a href="https://www.xnxx.com/" class="btn-5"><span>XNXX</span></a>
-        <a href="https://pt.pornhub.com/" class="btn-5"><span>Pornhub</span></a>
-        <a href="https://www.xvideos.com/" class="btn-5"><span>XVideos</span></a>
-        <a href="https://xvideosporno.blog.br/" class="btn-5"><span>XVideos Blog</span></a>
-        <a href="https://theporndude.com/pt/top-porn-tube-sites" class="btn-5"><span>The Porn Dude</span></a>
+        <a href="https://www.xnxx.com/" class="btn-101">XNXX</a>
+        <a href="https://pt.pornhub.com/" class="btn-101">Pornhub</a>
+        <a href="https://www.xvideos.com/" class="btn-101">XVideos</a>
+        <a href="https://xvideosporno.blog.br/" class="btn-101">XVideos Blog</a>
+        <a href="https://theporndude.com/pt/top-porn-tube-sites" class="btn-101">The Porn Dude</a>
     </div>
 
 </body>
