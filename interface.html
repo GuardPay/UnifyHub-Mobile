@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botões Animados - UnifyHub</title>
+    <style>
+        /* Estilos gerais */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #39016a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+        
+        .container {
+            text-align: center;
+        }
+
+        /* Estilo do título e logo */
+        .logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        /* Estilo dos botões */
+        .botao {
+            font-size: 1.2rem;
+            color: #fff;
+            background: #6204a5;
+            border: none;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+
+        .botao:hover {
+            background: #4a0384;
+        }
+
+        /* Animação de sombra e efeito hover */
+        .botao::before {
+            content: attr(data-texto);
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: left 0.3s ease;
+        }
+
+        .botao:hover::before {
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo e título UnifyHub -->
+        <img src="https://raw.githubusercontent.com/GuardPay/UnifyHub-Mobile/refs/heads/main/LogoMakerCa-1730379978953.png" alt="Logo UnifyHub" class="logo">
+        <h1>UnifyHub</h1>
+        
+        <!-- Botões animados com links internos para outras páginas HTML -->
+        <button class="botao" data-texto="Botão" onclick="window.location.href='google.html'">Google</button>
+        <button class="botao" data-texto="Ferramentas" onclick="window.location.href='ferramentas.html'">Ferramentas</button>
+        <button class="botao" data-texto="Morador" onclick="window.location.href='adulto.html'">Modo Adulto </button>
+        <button class="botao" data-texto="Filmes" onclick="window.location.href='filmes.html'">Minhas Informações</button>
+        <button class="botao" data-texto="Filmes e Diversão" onclick="window.location.href='filmes_e_diversao.html'">Filmes e Diversão</button>
+    </div>
+
+    <!-- Script GSAP para animações -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
+    <script>
+        // Animação de entrada com GSAP para os botões
+        gsap.from(".botao", {
+            opacity: 0,
+            y: 50,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out"
+        });
+
+        // Animação ao passar o mouse sobre os botões
+        document.querySelectorAll(".botao").forEach(botao => {
+            botao.addEventListener("mouseenter", () => {
+                gsap.to(botao, {
+                    scale: 1.1,
+                    duration: 0.2,
+                    ease: "power1.inOut"
+                });
+            });
+
+            botao.addEventListener("mouseleave", () => {
+                gsap.to(botao, {
+                    scale: 1,
+                    duration: 0.2,
+                    ease: "power1.inOut"
+                });
+            });
+        });
+    </script>
+</body>
+</html>
