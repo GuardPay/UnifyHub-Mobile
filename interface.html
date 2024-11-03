@@ -116,6 +116,36 @@
                     ease: "power1.inOut"
                 });
             });
+
+            // Animação ao pressionar o botão
+            botao.addEventListener("mousedown", () => {
+                gsap.to(botao, {
+                    scale: 0.95,
+                    boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+                    duration: 0.1,
+                    ease: "power1.out"
+                });
+                gsap.to(botao, {
+                    backgroundColor: "#4a0384",
+                    duration: 0.1,
+                    ease: "power1.out"
+                });
+            });
+
+            // Animação ao soltar o botão
+            botao.addEventListener("mouseup", () => {
+                gsap.to(botao, {
+                    scale: 1,
+                    boxShadow: "none",
+                    duration: 0.1,
+                    ease: "power1.in"
+                });
+                gsap.to(botao, {
+                    backgroundColor: "#6204a5",
+                    duration: 0.1,
+                    ease: "power1.in"
+                });
+            });
         });
     </script>
 </body>
