@@ -120,8 +120,7 @@
             // Animação ao pressionar o botão
             botao.addEventListener("mousedown", () => {
                 gsap.to(botao, {
-                    scale: 0.95,
-                    boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+                    scale: 0.9,
                     duration: 0.1,
                     ease: "power1.out"
                 });
@@ -136,7 +135,6 @@
             botao.addEventListener("mouseup", () => {
                 gsap.to(botao, {
                     scale: 1,
-                    boxShadow: "none",
                     duration: 0.1,
                     ease: "power1.in"
                 });
@@ -145,6 +143,15 @@
                     duration: 0.1,
                     ease: "power1.in"
                 });
+            });
+
+            // Previne que a animação de clique persista após a navegação
+            botao.addEventListener("click", (event) => {
+                event.preventDefault();
+                let targetUrl = botao.getAttribute('onclick').match(/'([^']+)'/)[1];
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 200); // tempo de espera para ver a animação antes da navegação
             });
         });
     </script>
