@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interface de Senha</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <title>Padrão de Desbloqueio</title>
     <style>
-        /* Estilos gerais */
         body, html {
             margin: 0;
             padding: 0;
@@ -20,36 +18,23 @@
         }
 
         .container {
-            text-align: center;
-        }
-
-        .logo {
-            width: 80px;
-            height: auto;
-            margin-bottom: 20px;
-        }
-
-        .message {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .password-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
-            padding-top: 20px;
+            gap: 20px;
         }
 
-        #passwordInput {
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            width: 200px;
-            text-align: center;
-            outline: none;
+        #patternCanvas {
+            background-color: #6201a1;
+            border-radius: 10px;
+            touch-action: none;
+        }
+
+        .section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
 
         button {
@@ -66,74 +51,250 @@
         button:hover {
             background-color: #4b017b;
         }
+
+        #passwordInput {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            width: 200px;
+            text-align: center;
+            outline: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #000;
+        }
+
+        .modal-content button {
+            margin-top: 10px;
+            background-color: #6201a1;
+            color: white;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://raw.githubusercontent.com/GuardPay/UnifyHub-Mobile/refs/heads/main/LogoMakerCa-1730379978953.png" alt="Logo" class="logo">
-        <div id="welcomeMessage" class="message">Olá, Seja Bem-vindo</div>
-        <div id="passwordSection" class="password-section" style="display: none;">
-            <input type="password" id="passwordInput" placeholder="Digite a senha">
+        <div class="section" id="passwordSection">
+            <input type="password" id="passwordInput" placeholder="Digite a senha inicial">
             <button onclick="verifyPassword()">Entrar</button>
         </div>
-        <div id="accessMessage" class="message" style="display: none;"></div>
+        <div class="section" id="patternSection">
+            <canvas id="patternCanvas" width="300" height="300"></canvas>
+        </div>
+        <div id="message"></div>
+    </div>
+
+    <div class="modal" id="drawPatternModal">
+        <div class="modal-content">
+            <p>Por favor, desenhe seu padrão de desbloqueio.</p>
+            <button onclick="closeDrawPatternModal()">OK</button>
+        </div>
+    </div>
+
+    <div class="modal" id="patternSavedModal">
+        <div class="modal-content">
+            <p>Padrão salvo com sucesso!</p>
+            <button onclick="closePatternSavedModal()">OK</button>
+        </div>
+    </div>
+
+    <div class="modal" id="incorrectPatternModal">
+        <div class="modal-content">
+            <p>Padrão incorreto! Tente novamente.</p>
+            <button onclick="closeIncorrectPatternModal()">OK</button>
+        </div>
     </div>
 
     <script>
         const correctPassword = "24250@Ln";
-        const accessTimeLimit = 1800000; // 30 minutos em milissegundos
+        const passwordSection = document.getElementById('passwordSection');
+        const patternSection = document.getElementById('patternSection');
+        const canvas = document.getElementById('patternCanvas');
+        const ctx = canvas.getContext('2d');
+        const dotRadius = 10;
+        const dots = [];
+        const pattern = [];
+        const gridCount = 3;
+        let savedPattern = JSON.parse(localStorage.getItem('savedPattern')) || null;
+        const passwordVerified = localStorage.getItem('passwordVerified');
+        const drawPatternModal = document.getElementById('drawPatternModal');
+        const patternSavedModal = document.getElementById('patternSavedModal');
+        const incorrectPatternModal = document.getElementById('incorrectPatternModal');
+        let isDrawing = false;
+        let lastDot = null;
 
-        // Verifica se o acesso foi concedido e se ainda está dentro do limite de tempo
-        function checkAccess() {
-            const lastAccessTime = localStorage.getItem("lastAccessTime");
-            const currentTime = Date.now();
-
-            // Se não houver um horário de acesso armazenado, pede a senha
-            if (!lastAccessTime) {
-                return false;
-            }
-
-            // Verifica se o acesso foi concedido há mais de 30 minutos
-            return currentTime - lastAccessTime < accessTimeLimit;
-        }
-
-        // Animação de Boas-vindas
-        gsap.from("#welcomeMessage", { opacity: 0, y: -50, duration: 1.5 });
-        gsap.to("#welcomeMessage", { opacity: 1, y: 0, duration: 1.5, onComplete: initializeInterface });
-
-        function initializeInterface() {
-            if (checkAccess()) {
-                // Se já tiver acesso, redireciona diretamente para a página
-                window.location.href = "interface.html";
+        window.onload = function() {
+            if (passwordVerified === "true") {
+                patternSection.style.display = 'flex';
+                if (!savedPattern) {
+                    showDrawPatternModal();
+                }
             } else {
-                // Se não tiver acesso, mostra a seção de senha
-                document.getElementById("passwordSection").style.display = "flex";
+                passwordSection.style.display = 'flex';
             }
-        }
+            initializeDots();
+        };
 
         function verifyPassword() {
-            const passwordInput = document.getElementById("passwordInput").value;
-            const accessMessage = document.getElementById("accessMessage");
-            
+            const passwordInput = document.getElementById('passwordInput').value;
             if (passwordInput === correctPassword) {
-                accessMessage.innerHTML = "Acesso Concedido";
-                accessMessage.style.color = "green";
-                
-                // Armazena o horário do acesso
-                localStorage.setItem("lastAccessTime", Date.now());
-                
-                // Redireciona para a outra página após uma pequena animação
-                gsap.to("#accessMessage", { opacity: 1, y: 0, duration: 1, onComplete: () => {
-                    window.location.href = "interface.html";
-                }});
+                localStorage.setItem('passwordVerified', "true");
+                passwordSection.style.display = 'none';
+                patternSection.style.display = 'flex';
+                if (!savedPattern) {
+                    showDrawPatternModal();
+                }
             } else {
-                accessMessage.innerHTML = "Acesso Negado";
-                accessMessage.style.color = "red";
-                gsap.to("#accessMessage", { opacity: 1, y: 0, duration: 1 });
+                document.getElementById('message').innerText = "Senha incorreta!";
             }
+        }
 
-            document.getElementById("passwordSection").style.display = "none";
-            accessMessage.style.display = "block";
+        function initializeDots() {
+            const gap = canvas.width / (gridCount + 1);
+            for (let y = 1; y <= gridCount; y++) {
+                for (let x = 1; x <= gridCount; x++) {
+                    dots.push({ x: x * gap, y: y * gap });
+                }
+            }
+            drawDots();
+        }
+
+        function drawDots() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const dot of dots) {
+                ctx.beginPath();
+                ctx.arc(dot.x, dot.y, dotRadius, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('touchstart', startDrawing);
+
+        function startDrawing(event) {
+            event.preventDefault();
+            isDrawing = true;
+            pattern.length = 0;
+            lastDot = null;
+            drawDots();
+        }
+
+        canvas.addEventListener('mousemove', drawPattern);
+        canvas.addEventListener('touchmove', drawPattern);
+
+        function drawPattern(event) {
+            if (!isDrawing) return;
+            
+            const { clientX, clientY } = getEventPosition(event);
+            for (let i = 0; i < dots.length; i++) {
+                const dot = dots[i];
+                if (isPointInCircle(clientX, clientY, dot.x, dot.y, dotRadius * 2)) {
+                    if (lastDot !== dot) {
+                        lastDot = dot;
+                        if (!pattern.includes(i)) {
+                            pattern.push(i);
+                            drawLineTo(dot.x, dot.y);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function stopDrawing() {
+            isDrawing = false;
+            if (pattern.length > 0) {
+                if (!savedPattern) {
+                    localStorage.setItem('savedPattern', JSON.stringify(pattern));
+                    savedPattern = pattern.slice();
+                    showPatternSavedModal();
+                } else if (JSON.stringify(pattern) === JSON.stringify(savedPattern)) {
+                    redirectToIndex();
+                } else {
+                    showIncorrectPatternModal();
+                }
+            }
+            pattern.length = 0;
+            drawDots();
+        }
+
+        function drawLineTo(x, y) {
+            if (pattern.length > 1) {
+                const lastIndex = pattern[pattern.length - 2];
+                const lastDot = dots[lastIndex];
+                ctx.beginPath();
+                ctx.moveTo(lastDot.x, lastDot.y);
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
+
+        function isPointInCircle(px, py, cx, cy, radius) {
+            return Math.sqrt((px - cx) ** 2 + (py - cy) ** 2) < radius;
+        }
+
+        function getEventPosition(event) {
+            const rect = canvas.getBoundingClientRect();
+            if (event.touches) {
+                event = event.touches[0];
+            }
+            return {
+                clientX: event.clientX - rect.left,
+                clientY: event.clientY - rect.top
+            };
+        }
+
+        function showDrawPatternModal() {
+            drawPatternModal.style.display = 'flex';
+        }
+
+        function closeDrawPatternModal() {
+            drawPatternModal.style.display = 'none';
+        }
+
+        function showPatternSavedModal() {
+            patternSavedModal.style.display = 'flex';
+        }
+
+        function closePatternSavedModal() {
+            patternSavedModal.style.display = 'none';
+        }
+
+        function showIncorrectPatternModal() {
+            incorrectPatternModal.style.display = 'flex';
+        }
+
+        function closeIncorrectPatternModal() {
+            incorrectPatternModal.style.display = 'none';
+        }
+
+        function redirectToIndex() {
+            window.location.href = 'interface.html';
         }
     </script>
 </body>
